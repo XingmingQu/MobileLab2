@@ -125,7 +125,14 @@
     // So our window size ~=10
     int windowSize=10;
         
-    [self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize];
+//    [self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize];
+//
+    int firstFeq=0;
+    int secondFeq=0;;
+    //Passing by reference
+    [self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize returnFirstFeqAt:&firstFeq returnSecondFeqAt:&secondFeq];
+    NSLog(@"%dHZ",firstFeq);
+    NSLog(@"%dHZ",secondFeq);
         
     free(arrayData);
     free(fftMagnitude);

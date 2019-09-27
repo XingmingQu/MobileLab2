@@ -67,7 +67,7 @@
 }
 
 
-- (NSArray *)findTwoPeaksFrom:(float *)fftArray Withlenth:(int)arrLength withWindowSize:(int)windowSize{
+- (void)findTwoPeaksFrom:(float *)fftArray Withlenth:(int)arrLength withWindowSize:(int)windowSize returnFirstFeqAt:(int *)firstFeq returnSecondFeqAt:(int *)secondFeq{
     
     // using https://developer.apple.com/documentation/accelerate/1450505-vdsp_vswmax?language=objc
     //vDSP_vswmax
@@ -78,15 +78,46 @@
     
     vDSP_vswmax(fftArray, 1, maxValueOfEachWindow, 1, numOfWindowPosition, windowSize);
     
-    //
+    //So we have maxValueOfEachWindow. What we need to do next is to find all the peaks' indexes.
+    // the way to find peak index is to traverse the fftArray
+    // if the fftArray[i] == the maxValueOfEachWindow[i], this i is a peak index
+    NSMutableArray *peaksIndex = [[NSMutableArray alloc] init];
+    for (int i = 0; i < numOfWindowPosition; i++) {
+        if (maxValueOfEachWindow[i] == fftArray[i]) {
+            [peaksIndex addObject:[NSNumber numberWithInteger:i]];
+        }
+    }
+    
+    // Next we can just find the first two largest peak by traversing peaksIndex
+    int firstPeakIndex=[peaksIndex[0] intValue], secondPeakIndex=[peaksIndex[1] intValue];
+    
+    for(int i=2;i<peaksIndex.count;i++){
+        int currentPeakIndex=[peaksIndex[i] intValue];
+        if (fftArray[currentPeakIndex] > fftArray[firstPeakIndex]){
+            secondPeakIndex=firstPeakIndex;
+            firstPeakIndex=currentPeakIndex;
+        }else if(fftArray[currentPeakIndex] > fftArray[secondPeakIndex] ){
+            secondPeakIndex=currentPeakIndex;
+        }
+    }
+    
+    
+
+    
+    // since our df =F_s/N =44100/8192 ~=5.38 HZ
+    
+    int first = 5.38 * firstPeakIndex;
+    int second = 5.38 * secondPeakIndex;
+//    NSLog(@"%d",first);
+//    NSLog(@"%d",second);
+    *firstFeq=first;
+    *secondFeq=second;
     
 //    for(int i=0;i<10;i++){
 //        NSLog(@"%f",maxValueOfEachWindow[i]);
 //    }
 
-    
-    NSMutableArray *result = [[NSMutableArray alloc] init];
-    return result;
+
 }
 
 
