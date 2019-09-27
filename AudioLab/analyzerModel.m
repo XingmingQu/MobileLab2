@@ -82,9 +82,12 @@
     // the way to find peak index is to traverse the fftArray
     // if the fftArray[i] == the maxValueOfEachWindow[i], this i is a peak index
     NSMutableArray *peaksIndex = [[NSMutableArray alloc] init];
+    int current=-10000;
     for (int i = 0; i < numOfWindowPosition; i++) {
-        if (maxValueOfEachWindow[i] == fftArray[i]) {
+        // but we also add peaks at least 50Hz apart
+        if (i-current>=windowSize && maxValueOfEachWindow[i] == fftArray[i] ) {
             [peaksIndex addObject:[NSNumber numberWithInteger:i]];
+            current=i;
         }
     }
     
@@ -97,8 +100,10 @@
             secondPeakIndex=firstPeakIndex;
             firstPeakIndex=currentPeakIndex;
         }else if(fftArray[currentPeakIndex] > fftArray[secondPeakIndex] ){
+            
             secondPeakIndex=currentPeakIndex;
         }
+//        NSLog(@"%d",(secondPeakIndex-firstPeakIndex));
     }
     
     
