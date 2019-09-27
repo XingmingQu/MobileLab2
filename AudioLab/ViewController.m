@@ -22,6 +22,9 @@
 @property (strong, nonatomic) SMUGraphHelper *graphHelper;
 @property (strong, nonatomic) FFTHelper *fftHelper;
 @property (strong, nonatomic) analyzerModel *myanalyzerModel;
+@property (weak, nonatomic) IBOutlet UILabel *firstLabel;
+@property (weak, nonatomic) IBOutlet UILabel *secondLabel;
+-(void)setHZlabelValue: (int)first Secondlabel:(int)second;
 @end
 
 
@@ -131,9 +134,17 @@
     int secondFeq=0;;
     //Passing by reference
     [self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize returnFirstFeqAt:&firstFeq returnSecondFeqAt:&secondFeq];
-    NSLog(@"%dHZ",firstFeq);
-    NSLog(@"%dHZ",secondFeq);
         
+        //set timer
+//        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(changeLabelColor) userInfo:nil repeats:(YES)];
+////
+//        [timer fire];
+//    NSLog(@"%dHZ",firstFeq);
+//    NSLog(@"%dHZ",secondFeq);
+    self.firstLabel.text = [NSString stringWithFormat:@"%d Hz", firstFeq];
+    self.secondLabel.text = [NSString stringWithFormat:@"%d Hz", secondFeq];
+
+//
     free(arrayData);
     free(fftMagnitude);
     }
@@ -144,5 +155,9 @@
     [self.graphHelper draw]; // draw the graph
 }
 
+//- (void)setHZlabelValue:(int)first Secondlabel:(int)second{
+//    self.firstLabel.text = [NSString stringWithFormat:@"%d Hz", first];
+//    self.secondLabel.text = [NSString stringWithFormat:@"%d Hz", second];
+//}
 
 @end
