@@ -18,8 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(void)playAudio;
 -(void)stopAudio;
 //-(NSArray *)findTwoPeaks：(int)windowSize ：(int)arrLength;
--(void)findTwoPeaksFrom:(float *)fftArray Withlenth:(int)arrLength withWindowSize:(int)windowSize returnFirstFeqAt:(int*)firstFeq returnSecondFeqAt:(int*)secondFeq;
+-(int)findTwoPeaksFrom:(float *)fftArray Withlenth:(int)arrLength withWindowSize:(int)windowSize returnFirstFeqAt:(int*)firstFeq returnSecondFeqAt:(int*)secondFeq;
 
+-(float*)getZoomedArr:(float *)fftArray WithRange:(int)range atIndex:(int)index;
 
 @end
 

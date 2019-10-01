@@ -8,7 +8,7 @@
 
 #import "analyzerModel.h"
 
-
+#define FFT_BUFFER_SIZE 2048*2
 @implementation analyzerModel
 
 #pragma mark Lazy Instantiation
@@ -39,7 +39,7 @@
 }
 
 -(void)playAudio {
-
+    
     double frequency = self.outputFrequency * 1000;     //starting frequency
     __block float phase = 0.0;
     __block float samplingRate = self.audioManager.samplingRate;
@@ -52,7 +52,7 @@
          for (int i=0; i < numFrames; ++i)
          {
              data[i] = sin(phase);
-//             NSLog(@"%.f",sin(phase));
+             //             NSLog(@"%.f",sin(phase));
              phase += phaseIncrement;
              if (phase >= sineWaveRepeatMax) phase -= sineWaveRepeatMax;
          }
@@ -66,8 +66,8 @@
     [self.audioManager setOutputBlock:nil];
 }
 
-
-- (void)findTwoPeaksFrom:(float *)fftArray Withlenth:(int)arrLength withWindowSize:(int)windowSize returnFirstFeqAt:(int *)firstFeq returnSecondFeqAt:(int *)secondFeq{
+// return the first peak index
+- (int)findTwoPeaksFrom:(float *)fftArray Withlenth:(int)arrLength withWindowSize:(int)windowSize returnFirstFeqAt:(int *)firstFeq returnSecondFeqAt:(int *)secondFeq{
     
     // using https://developer.apple.com/documentation/accelerate/1450505-vdsp_vswmax?language=objc
     //vDSP_vswmax
@@ -103,27 +103,40 @@
             
             secondPeakIndex=currentPeakIndex;
         }
-//        NSLog(@"%d",(secondPeakIndex-firstPeakIndex));
+        //        NSLog(@"%d",(secondPeakIndex-firstPeakIndex));
     }
     
-    
-
     
     // since our df =F_s/N =44100/8192 ~=5.38 HZ
     
     int first = 5.38 * firstPeakIndex;
     int second = 5.38 * secondPeakIndex;
-//    NSLog(@"%d",first);
-//    NSLog(@"%d",second);
+    //    NSLog(@"%d",first);
+    //    NSLog(@"%d",second);
     *firstFeq=first;
     *secondFeq=second;
     
-//    for(int i=0;i<10;i++){
-//        NSLog(@"%f",maxValueOfEachWindow[i]);
-//    }
-
-
+    //    for(int i=0;i<10;i++){
+    //        NSLog(@"%f",maxValueOfEachWindow[i]);
+    //    }
+    
+    return firstPeakIndex;
 }
 
-
+- (float *)getZoomedArr:(float *)fftArray WithRange:(int)range atIndex:(int)index{
+    
+    int start;
+    int end;
+    
+    start = index-range<0 ? 0: index-range;
+    end = index+range>FFT_BUFFER_SIZE-1 ? FFT_BUFFER_SIZE-1: index+range;
+    
+    float *zoomedArr = malloc(sizeof(float)*((end-start)*2+1));
+    
+    for(int i=start,j=0;i<end;i++,j++){
+        zoomedArr[j]=fftArray[i];
+    }
+    
+    return zoomedArr;
+}
 @end

@@ -59,7 +59,7 @@
     if(!_graphHelper){
         _graphHelper = [[SMUGraphHelper alloc]initWithController:self
                                         preferredFramesPerSecond:15
-                                                       numGraphs:2
+                                                       numGraphs:3
                                                        plotStyle:PlotStyleSeparated
                                                maxPointsPerGraph:BUFFER_SIZE];
     }
@@ -80,7 +80,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-   
+    
     [self.graphHelper setFullScreenBounds];
     
     __block ViewController * __weak  weakSelf = self;
@@ -96,47 +96,59 @@
 - (void)update{
     // just plot the audio stream
     if (self.lockInSwitch.isOn == false){
-    // get audio stream data
-    float* arrayData = malloc(sizeof(float)*BUFFER_SIZE);
-    float* fftMagnitude = malloc(sizeof(float)*BUFFER_SIZE/2);
-    
-    
-    [self.buffer fetchFreshData:arrayData withNumSamples:BUFFER_SIZE];
-    
-    //send off for graphing
-    [self.graphHelper setGraphData:arrayData
-                    withDataLength:BUFFER_SIZE
-                     forGraphIndex:0];
-    
-    // take forward FFT
-    [self.fftHelper performForwardFFTWithData:arrayData
-                   andCopydBMagnitudeToBuffer:fftMagnitude];
-    
-    // graph the FFT Data
-    [self.graphHelper setGraphData:fftMagnitude
-                    withDataLength:BUFFER_SIZE/2
-                     forGraphIndex:1
-                 withNormalization:64.0
-                     withZeroValue:-60];
-    
-    [self.graphHelper update]; // update the graph
-//    [fftMagnitude w]
-//    NSLog(@"%.3f %.3f  ",fftMagnitude[0],fftMagnitude[1]);
+        // get audio stream data
+        float* arrayData = malloc(sizeof(float)*BUFFER_SIZE);
+        float* fftMagnitude = malloc(sizeof(float)*BUFFER_SIZE/2);
         
-    //our df =F_s/N =44100/8192 ~=5.38 HZ
-    // requirementt = Is able to distinguish tones at least 50Hz apart
-    // So our window size ~=10
-    int windowSize=10;
-    int firstFeq=0;
-    int secondFeq=0;;
-    //Passing by reference
-    [self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize returnFirstFeqAt:&firstFeq returnSecondFeqAt:&secondFeq];
         
-    self.firstLabel.text = [NSString stringWithFormat:@"%d Hz", firstFeq];
-    self.secondLabel.text = [NSString stringWithFormat:@"%d Hz", secondFeq];
+        [self.buffer fetchFreshData:arrayData withNumSamples:BUFFER_SIZE];
+        
+        //send off for graphing
+        [self.graphHelper setGraphData:arrayData
+                        withDataLength:BUFFER_SIZE
+                         forGraphIndex:0];
+        
+        // take forward FFT
+        [self.fftHelper performForwardFFTWithData:arrayData
+                       andCopydBMagnitudeToBuffer:fftMagnitude];
+        
+        // graph the FFT Data
+        [self.graphHelper setGraphData:fftMagnitude
+                        withDataLength:BUFFER_SIZE/2
+                         forGraphIndex:1
+                     withNormalization:64.0
+                         withZeroValue:-60];
+        
+        [self.graphHelper update]; // update the graph
+        //    [fftMagnitude w]
+        //    NSLog(@"%.3f %.3f  ",fftMagnitude[0],fftMagnitude[1]);
+        
+        //our df =F_s/N =44100/8192 ~=5.38 HZ
+        // requirementt = Is able to distinguish tones at least 50Hz apart
+        // So our window size ~=10
+        int windowSize=10;
+        int firstFeq=0;
+        int secondFeq=0;
+        int firstPeakIndex;
+        //Passing by reference
+        firstPeakIndex=[self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize returnFirstFeqAt:&firstFeq returnSecondFeqAt:&secondFeq];
+        //        NSLog(@"%d",firstPeakIndex);
+        
+        self.firstLabel.text = [NSString stringWithFormat:@"%d Hz", firstFeq];
+        self.secondLabel.text = [NSString stringWithFormat:@"%d Hz", secondFeq];
+        
+        float * zoomedArr;
+        zoomedArr=[self.myanalyzerModel getZoomedArr:fftMagnitude WithRange:5 atIndex:firstPeakIndex];
+        
+        
+        [self.graphHelper setGraphData:zoomedArr
+                        withDataLength:5*2+1
+                         forGraphIndex:2
+                     withNormalization:64.0
+                         withZeroValue:-60];
 
-    free(arrayData);
-    free(fftMagnitude);
+        free(arrayData);
+        free(fftMagnitude);
     }
 }
 
