@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		82837F1E233D5C85007AB7F6 /* analyzerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 82837F1C233D5C84007AB7F6 /* analyzerModel.m */; };
-		82837F21233D5C92007AB7F6 /* ModelBViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 82837F20233D5C92007AB7F6 /* ModelBViewController.m */; };
 		B6BD9E1F1D6E384A0009AB3F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BD9E1E1D6E384A0009AB3F /* main.m */; };
 		B6BD9E221D6E384A0009AB3F /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BD9E211D6E384A0009AB3F /* AppDelegate.m */; };
 		B6BD9E251D6E384A0009AB3F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B6BD9E241D6E384A0009AB3F /* ViewController.m */; };
@@ -44,8 +43,6 @@
 /* Begin PBXFileReference section */
 		82837F1C233D5C84007AB7F6 /* analyzerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = analyzerModel.m; sourceTree = "<group>"; };
 		82837F1D233D5C84007AB7F6 /* analyzerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = analyzerModel.h; sourceTree = "<group>"; };
-		82837F1F233D5C92007AB7F6 /* ModelBViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelBViewController.h; sourceTree = "<group>"; };
-		82837F20233D5C92007AB7F6 /* ModelBViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ModelBViewController.m; sourceTree = "<group>"; };
 		B6BD9E1A1D6E384A0009AB3F /* AudioLab.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AudioLab.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6BD9E1E1D6E384A0009AB3F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		B6BD9E201D6E384A0009AB3F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -124,8 +121,6 @@
 			children = (
 				82837F1D233D5C84007AB7F6 /* analyzerModel.h */,
 				82837F1C233D5C84007AB7F6 /* analyzerModel.m */,
-				82837F1F233D5C92007AB7F6 /* ModelBViewController.h */,
-				82837F20233D5C92007AB7F6 /* ModelBViewController.m */,
 				B6BD9E201D6E384A0009AB3F /* AppDelegate.h */,
 				B6BD9E211D6E384A0009AB3F /* AppDelegate.m */,
 				B6BD9E231D6E384A0009AB3F /* ViewController.h */,
@@ -320,7 +315,6 @@
 				B6BD9E641D6F4BA90009AB3F /* FFTHelper.m in Sources */,
 				B6BD9E531D6E398F0009AB3F /* Novocaine.m in Sources */,
 				B6BD9E251D6E384A0009AB3F /* ViewController.m in Sources */,
-				82837F21233D5C92007AB7F6 /* ModelBViewController.m in Sources */,
 				B6BD9E221D6E384A0009AB3F /* AppDelegate.m in Sources */,
 				B6BD9E1F1D6E384A0009AB3F /* main.m in Sources */,
 			);
