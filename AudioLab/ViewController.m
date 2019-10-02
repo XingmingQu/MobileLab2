@@ -21,9 +21,12 @@
 @property (weak, nonatomic) IBOutlet UISwitch *lockInSwitch;
 @property (strong, nonatomic) SMUGraphHelper *graphHelper;
 @property (strong, nonatomic) FFTHelper *fftHelper;
-@property (strong, nonatomic) analyzerModel *myanalyzerModel;
+@property (strong, nonatomic) analyzerModel *myAnalyzerModel;
 @property (weak, nonatomic) IBOutlet UILabel *firstLabel;
 @property (weak, nonatomic) IBOutlet UILabel *secondLabel;
+
+@property (weak, nonatomic) IBOutlet UISlider *frequencyControlSlider;
+@property (weak, nonatomic) IBOutlet UILabel *frequencyLabel;
 
 @end
 
@@ -39,11 +42,11 @@
     return _audioManager;
 }
 
-- (analyzerModel *)myanalyzerModel{
-    if(!_myanalyzerModel){
-        _myanalyzerModel = [analyzerModel sharedInstance];
+- (analyzerModel *)myAnalyzerModel{
+    if(!_myAnalyzerModel){
+        _myAnalyzerModel = [analyzerModel sharedInstance];
     }
-    return _myanalyzerModel;
+    return _myAnalyzerModel;
 }
 
 
@@ -130,7 +133,7 @@
         int secondFeq=0;
         int firstPeakIndex;
         //Passing by reference
-        firstPeakIndex=[self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize returnFirstFeqAt:&firstFeq returnSecondFeqAt:&secondFeq];
+        firstPeakIndex=[self.myAnalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize returnFirstFeqAt:&firstFeq returnSecondFeqAt:&secondFeq];
         
         
         self.firstLabel.text = [NSString stringWithFormat:@"%d Hz", firstFeq];
@@ -138,7 +141,7 @@
         
         //auto lock
         NSLog(@"%f",fftMagnitude[firstPeakIndex]);
-        if(fftMagnitude[firstPeakIndex]<-2.5){
+        if(fftMagnitude[firstPeakIndex]<-6.5){
 //            NSLog(@"%@",@"Lock");
             self.lockInSwitch.on = true;
         }
@@ -148,13 +151,13 @@
         float * zoomedArr;
         int range=5;
         int zoomedArrLen;
-        zoomedArr=[self.myanalyzerModel getZoomedArr:fftMagnitude WithRange:range atIndex:firstPeakIndex returnZoomedArrLength:&zoomedArrLen];
+        zoomedArr=[self.myAnalyzerModel getZoomedArr:fftMagnitude WithRange:range atIndex:firstPeakIndex returnZoomedArrLength:&zoomedArrLen];
         
         //dynamically change the zoomedArrLen
         [self.graphHelper setGraphData:zoomedArr
                         withDataLength:zoomedArrLen
                          forGraphIndex:2
-                     withNormalization:64.0
+                     withNormalization:32.0
                          withZeroValue:-60];
         
         free(arrayData);
@@ -167,6 +170,17 @@
     [self.graphHelper draw]; // draw the graph
 }
 
+- (IBAction)sliderValueChanged:(UISlider *)sender {
+    self.frequencyLabel.text = [NSString stringWithFormat:@"%d Hz", (int)sender.value];
+    //    self.myAnalyzerModel.outputFrequency = (double)sender.value;
+    [self.myAnalyzerModel setFrequency:(int)sender.value];
+    [self.myAnalyzerModel playAudio];
+    //    NSLog(@"%d,",self.myAnalyzerModel.outputFrequency);
+    
+}
+- (IBAction)stopPlayButton:(UIButton *)sender {
+    [self.myAnalyzerModel stopAudio];
+}
 
 
 @end
