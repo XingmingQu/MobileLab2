@@ -171,7 +171,7 @@
 }
 
 - (IBAction)sliderValueChanged:(UISlider *)sender {
-    self.frequencyLabel.text = [NSString stringWithFormat:@"%d Hz", (int)sender.value];
+    self.frequencyLabel.text = [NSString stringWithFormat:@"Output audio frequency: %d Hz", (int)sender.value];
     //    self.myAnalyzerModel.outputFrequency = (double)sender.value;
     [self.myAnalyzerModel setFrequency:(int)sender.value];
     [self.myAnalyzerModel playAudio];
