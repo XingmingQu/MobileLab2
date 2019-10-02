@@ -120,7 +120,7 @@
                          withZeroValue:-60];
         
         [self.graphHelper update]; // update the graph
-
+        
         
         //Start peak finding..................
         //our df =F_s/N =44100/8192 ~=5.38 HZ
@@ -131,10 +131,23 @@
         int firstPeakIndex;
         //Passing by reference
         firstPeakIndex=[self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize returnFirstFeqAt:&firstFeq returnSecondFeqAt:&secondFeq];
-
+        
         
         self.firstLabel.text = [NSString stringWithFormat:@"%d Hz", firstFeq];
         self.secondLabel.text = [NSString stringWithFormat:@"%d Hz", secondFeq];
+        
+        //auto lock
+        NSLog(@"%f",fftMagnitude[firstPeakIndex]);
+        if(fftMagnitude[firstPeakIndex]<-2.5){
+            NSLog(@"%@",@"Lock");
+            self.lockInSwitch.on = true;
+        }
+        
+        
+        //            NSLog(@"Mag--%f",fftMagnitude[firstPeakIndex]);
+        
+        
+
         
         //plot a zoomedArr just for analysis
         float * zoomedArr;
@@ -148,7 +161,7 @@
                          forGraphIndex:2
                      withNormalization:64.0
                          withZeroValue:-60];
-
+        
         free(arrayData);
         free(fftMagnitude);
     }
