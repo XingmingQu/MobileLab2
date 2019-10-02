@@ -139,15 +139,10 @@
         //auto lock
         NSLog(@"%f",fftMagnitude[firstPeakIndex]);
         if(fftMagnitude[firstPeakIndex]<-2.5){
-            NSLog(@"%@",@"Lock");
+//            NSLog(@"%@",@"Lock");
             self.lockInSwitch.on = true;
         }
         
-        
-        //            NSLog(@"Mag--%f",fftMagnitude[firstPeakIndex]);
-        
-        
-
         
         //plot a zoomedArr just for analysis
         float * zoomedArr;
