@@ -147,7 +147,7 @@
         }
         
         
-        //plot a zoomedArr just for analysis
+        //plot a zoomedArr just for model B
         float * zoomedArr;
         int range=5;
         int zoomedArrLen;
