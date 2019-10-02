@@ -7,17 +7,20 @@
 //
 
 #import "analyzerModel.h"
-
+//because our BUFFER_SIZE=2048*4
+// so fft buffer size is half of it
 #define FFT_BUFFER_SIZE 2048*2
+
 @implementation analyzerModel
 
 #pragma mark Lazy Instantiation
 
+//the slider in model B viewController will call this function
 -(void)setFrequency:(int)inputFreq{
     self.outputFrequency = inputFreq;
 }
 
-
+//other class can use sharedInstance to access the analysis functions
 +(analyzerModel*)sharedInstance{
     static analyzerModel * _sharedInstance = nil;
     
@@ -39,11 +42,9 @@
 }
 
 -(void)playAudio {
-    
-    double frequency = self.outputFrequency * 1000;     //starting frequency
+    double frequency = self.outputFrequency;     //starting frequency
     __block float phase = 0.0;
     __block float samplingRate = self.audioManager.samplingRate;
-    
     double phaseIncrement = 2*M_PI*frequency/samplingRate;
     double sineWaveRepeatMax = 2*M_PI;
     
@@ -52,7 +53,6 @@
          for (int i=0; i < numFrames; ++i)
          {
              data[i] = sin(phase);
-             //             NSLog(@"%.f",sin(phase));
              phase += phaseIncrement;
              if (phase >= sineWaveRepeatMax) phase -= sineWaveRepeatMax;
          }
@@ -66,7 +66,7 @@
     [self.audioManager setOutputBlock:nil];
 }
 
-// return the first peak index
+// return the first peak index(will use in model B) and get the two peak fequency
 - (int)findTwoPeaksFrom:(float *)fftArray Withlenth:(int)arrLength withWindowSize:(int)windowSize returnFirstFeqAt:(int *)firstFeq returnSecondFeqAt:(int *)secondFeq{
     
     // using https://developer.apple.com/documentation/accelerate/1450505-vdsp_vswmax?language=objc
@@ -84,7 +84,7 @@
     NSMutableArray *peaksIndex = [[NSMutableArray alloc] init];
     int current=-10000;
     for (int i = 0; i < numOfWindowPosition; i++) {
-        // but we also add peaks at least 50Hz apart
+        // but we also add peaks at least 50Hz apart so we add a constrain
         if (i-current>=windowSize && maxValueOfEachWindow[i] == fftArray[i] ) {
             [peaksIndex addObject:[NSNumber numberWithInteger:i]];
             current=i;
@@ -100,43 +100,31 @@
             secondPeakIndex=firstPeakIndex;
             firstPeakIndex=currentPeakIndex;
         }else if(fftArray[currentPeakIndex] > fftArray[secondPeakIndex] ){
-            
             secondPeakIndex=currentPeakIndex;
         }
-        //        NSLog(@"%d",(secondPeakIndex-firstPeakIndex));
     }
-    
-    
-    // since our df =F_s/N =44100/8192 ~=5.38 HZ
-    
+    // since our df =F_s/N =44100/8192 ~=5.38 HZ, we can multyply 5.38 to the index and get the frequency
     int first = 5.38 * firstPeakIndex;
     int second = 5.38 * secondPeakIndex;
-    //    NSLog(@"%d",first);
-    //    NSLog(@"%d",second);
     *firstFeq=first;
     *secondFeq=second;
-    
-    //    for(int i=0;i<10;i++){
-    //        NSLog(@"%f",maxValueOfEachWindow[i]);
-    //    }
     
     return firstPeakIndex;
 }
 
-- (float *)getZoomedArr:(float *)fftArray WithRange:(int)range atIndex:(int)index{
-    
-    int start;
-    int end;
-    
+//this function is just for analysis. Get a zoomed area around +=- range of the peak. So we can see how the points near peak move.
+- (float *)getZoomedArr:(float *)fftArray WithRange:(int)range atIndex:(int)index returnZoomedArrLength:(int *)arrLength{
+    int start,end;
+    //check edge case
     start = index-range<0 ? 0: index-range;
     end = index+range>FFT_BUFFER_SIZE-1 ? FFT_BUFFER_SIZE-1: index+range;
     
-    float *zoomedArr = malloc(sizeof(float)*((end-start)*2+1));
-    
+    float *zoomedArr = malloc(sizeof(float)*((end-start)+1));
+    //for edge case, sometimes the length of the arr is not range*2+1
+    *arrLength=(end-start)+1;
     for(int i=start,j=0;i<end;i++,j++){
         zoomedArr[j]=fftArray[i];
     }
-    
     return zoomedArr;
 }
 @end

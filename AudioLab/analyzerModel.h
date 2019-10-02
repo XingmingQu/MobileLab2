@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 //-(NSArray *)findTwoPeaks：(int)windowSize ：(int)arrLength;
 -(int)findTwoPeaksFrom:(float *)fftArray Withlenth:(int)arrLength withWindowSize:(int)windowSize returnFirstFeqAt:(int*)firstFeq returnSecondFeqAt:(int*)secondFeq;
 
--(float*)getZoomedArr:(float *)fftArray WithRange:(int)range atIndex:(int)index;
+-(float*)getZoomedArr:(float *)fftArray WithRange:(int)range atIndex:(int)index returnZoomedArrLength:(int *)arrLength;
 
 @end
 

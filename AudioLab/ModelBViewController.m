@@ -27,16 +27,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
+    // if we leave this page we stop the audio
     [self.myAnalyzerModel stopAudio];
 }
 
 - (IBAction)sliderValueChanged:(UISlider *)sender {
-    self.frequencyLabel.text = [NSString stringWithFormat:@"%d kHz", (int)sender.value];
+    self.frequencyLabel.text = [NSString stringWithFormat:@"%d Hz", (int)sender.value];
 //    self.myAnalyzerModel.outputFrequency = (double)sender.value;
     [self.myAnalyzerModel setFrequency:(int)sender.value];
     [self.myAnalyzerModel playAudio];

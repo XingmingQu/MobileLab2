@@ -120,29 +120,31 @@
                          withZeroValue:-60];
         
         [self.graphHelper update]; // update the graph
-        //    [fftMagnitude w]
-        //    NSLog(@"%.3f %.3f  ",fftMagnitude[0],fftMagnitude[1]);
+
         
+        //Start peak finding..................
         //our df =F_s/N =44100/8192 ~=5.38 HZ
-        // requirementt = Is able to distinguish tones at least 50Hz apart
-        // So our window size ~=10
+        // requirementt = Is able to distinguish tones at least 50Hz apart So our window size ~=10
         int windowSize=10;
         int firstFeq=0;
         int secondFeq=0;
         int firstPeakIndex;
         //Passing by reference
         firstPeakIndex=[self.myanalyzerModel findTwoPeaksFrom:fftMagnitude Withlenth:BUFFER_SIZE/2 withWindowSize:windowSize returnFirstFeqAt:&firstFeq returnSecondFeqAt:&secondFeq];
-        //        NSLog(@"%d",firstPeakIndex);
+
         
         self.firstLabel.text = [NSString stringWithFormat:@"%d Hz", firstFeq];
         self.secondLabel.text = [NSString stringWithFormat:@"%d Hz", secondFeq];
         
+        //plot a zoomedArr just for analysis
         float * zoomedArr;
-        zoomedArr=[self.myanalyzerModel getZoomedArr:fftMagnitude WithRange:5 atIndex:firstPeakIndex];
+        int range=5;
+        int zoomedArrLen;
+        zoomedArr=[self.myanalyzerModel getZoomedArr:fftMagnitude WithRange:range atIndex:firstPeakIndex returnZoomedArrLength:&zoomedArrLen];
         
-        
+        //dynamically change the zoomedArrLen
         [self.graphHelper setGraphData:zoomedArr
-                        withDataLength:5*2+1
+                        withDataLength:zoomedArrLen
                          forGraphIndex:2
                      withNormalization:64.0
                          withZeroValue:-60];
