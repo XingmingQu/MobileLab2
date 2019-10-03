@@ -144,15 +144,21 @@
         zoomedArr[i] = zoomedArr[i]/arrMax;
     }
 
-
-    double rightRatio,leftRatio;
-    rightRatio = zoomedArr[arrLength-2]/zoomedArr[arrLength/2];
-    leftRatio = zoomedArr[0]/zoomedArr[arrLength/2];
-//    NSLog(@"fenzi: %f    ---- fenmu:%f -----bizhi:%f",zoomedArr[arrLength-2],zoomedArr[arrLength/2],zoomedArr[arrLength-2]/zoomedArr[arrLength/2]);
-    NSLog(@"%f",zoomedArr[arrLength/2]-zoomedArr[0] );
-//    NSLog(@"%f  left    %f  right",leftRatio,rightRatio);
+    // after hours of experiments, we got the magic value = 0.8
+    double right,left;
+    right = zoomedArr[arrLength/2]-zoomedArr[arrLength-2] ;
+    left = zoomedArr[arrLength/2]-zoomedArr[0];
+    //    NSLog(@"left   : %f",zoomedArr[arrLength/2]-zoomedArr[0] );
+//    NSLog(@"right  : %f",zoomedArr[arrLength/2]-zoomedArr[arrLength-2] );
+    //    NSLog(@"%f  left    %f  right",leftRatio,rightRatio);
     
-
-    return 0;
+    //here we define 0 =push 1=pull 2 =no motion
+    if (right<0.8){
+        return 0;
+    }
+    if(left<0.8)
+        return 1;
+    
+    return 2;
 }
 @end

@@ -175,6 +175,7 @@
                         <outlet property="frequencyControlSlider" destination="JDt-h0-C1v" id="g32-ci-qrN"/>
                         <outlet property="frequencyLabel" destination="eDK-cb-dqP" id="HTa-DH-Z1U"/>
                         <outlet property="lockInSwitch" destination="VGq-el-oqu" id="7zf-BU-6bf"/>
+                        <outlet property="motionLabel" destination="KgR-r0-c3R" id="FDC-qZ-wY3"/>
                         <outlet property="secondLabel" destination="qsq-wQ-Mva" id="tgZ-fP-dKh"/>
                     </connections>
                 </viewController>

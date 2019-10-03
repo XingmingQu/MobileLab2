@@ -24,7 +24,7 @@
 @property (strong, nonatomic) analyzerModel *myAnalyzerModel;
 @property (weak, nonatomic) IBOutlet UILabel *firstLabel;
 @property (weak, nonatomic) IBOutlet UILabel *secondLabel;
-
+@property (weak, nonatomic) IBOutlet UILabel *motionLabel;
 @property (weak, nonatomic) IBOutlet UISlider *frequencyControlSlider;
 @property (weak, nonatomic) IBOutlet UILabel *frequencyLabel;
 
@@ -160,8 +160,14 @@
                      withNormalization:16.0
                          withZeroValue:-60];
         
-        int re = [self.myAnalyzerModel getMotionByZoomedArr:zoomedArr withArrLength:zoomedArrLen];
-        
+        int result = [self.myAnalyzerModel getMotionByZoomedArr:zoomedArr withArrLength:zoomedArrLen];
+        NSLog(@"%d",result);
+        if (result==0)
+            self.motionLabel.text=[NSString stringWithFormat:@"Push"];
+        else if (result ==1)
+            self.motionLabel.text=[NSString stringWithFormat:@"Pull"];
+        else
+            self.motionLabel.text=[NSString stringWithFormat:@"No Motion"];
         
         free(arrayData);
         free(fftMagnitude);
