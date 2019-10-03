@@ -161,7 +161,7 @@
                          withZeroValue:-60];
         
         int result = [self.myAnalyzerModel getMotionByZoomedArr:zoomedArr withArrLength:zoomedArrLen];
-        NSLog(@"%d",result);
+//        NSLog(@"%d",result);
         if (result==0)
             self.motionLabel.text=[NSString stringWithFormat:@"Push"];
         else if (result ==1)

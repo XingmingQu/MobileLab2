@@ -128,8 +128,6 @@
     return zoomedArr;
 }
 
-
-
 - (int)getMotionByZoomedArr:(float *)zoomedArr withArrLength:(int)arrLength{
     
     //for normalize, first we find max abs value
@@ -150,7 +148,6 @@
     left = zoomedArr[arrLength/2]-zoomedArr[0];
     //    NSLog(@"left   : %f",zoomedArr[arrLength/2]-zoomedArr[0] );
 //    NSLog(@"right  : %f",zoomedArr[arrLength/2]-zoomedArr[arrLength-2] );
-    //    NSLog(@"%f  left    %f  right",leftRatio,rightRatio);
     
     //here we define 0 =push 1=pull 2 =no motion
     if (right<0.8){
@@ -158,7 +155,6 @@
     }
     if(left<0.8)
         return 1;
-    
     return 2;
 }
 @end
