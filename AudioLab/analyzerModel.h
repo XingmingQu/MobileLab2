@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 -(float*)getZoomedArr:(float *)fftArray WithRange:(int)range atIndex:(int)index returnZoomedArrLength:(int *)arrLength;
 
--(int)getMotionByZoomedArr:(float *)zoomedArr withArrLength:(int *)arrLength;
+-(int)getMotionByZoomedArr:(float *)zoomedArr withArrLength:(int)arrLength;
 
 @end
 

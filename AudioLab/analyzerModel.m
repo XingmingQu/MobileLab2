@@ -127,4 +127,32 @@
     }
     return zoomedArr;
 }
+
+
+
+- (int)getMotionByZoomedArr:(float *)zoomedArr withArrLength:(int)arrLength{
+    
+    //for normalize, first we find max abs value
+    double arrMax=fabsf(zoomedArr[0]) ;
+    for(int i=1;i<arrLength;i++){
+        if(fabsf(zoomedArr[i])>arrMax){
+            arrMax=fabsf(zoomedArr[i]);
+        }
+    }
+    //normalize the array element to [-1,1]
+    for(int i=0;i<arrLength;i++){
+        zoomedArr[i] = zoomedArr[i]/arrMax;
+    }
+
+
+    double rightRatio,leftRatio;
+    rightRatio = zoomedArr[arrLength-2]/zoomedArr[arrLength/2];
+    leftRatio = zoomedArr[0]/zoomedArr[arrLength/2];
+//    NSLog(@"fenzi: %f    ---- fenmu:%f -----bizhi:%f",zoomedArr[arrLength-2],zoomedArr[arrLength/2],zoomedArr[arrLength-2]/zoomedArr[arrLength/2]);
+    NSLog(@"%f",zoomedArr[arrLength/2]-zoomedArr[0] );
+//    NSLog(@"%f  left    %f  right",leftRatio,rightRatio);
+    
+
+    return 0;
+}
 @end

@@ -140,8 +140,8 @@
         self.secondLabel.text = [NSString stringWithFormat:@"%d Hz", secondFeq];
         
         //auto lock
-        NSLog(@"%f",fftMagnitude[firstPeakIndex]);
-        if(fftMagnitude[firstPeakIndex]<-6.5){
+//        NSLog(@"%f",fftMagnitude[firstPeakIndex]);
+        if(fftMagnitude[firstPeakIndex]<-3.5){
 //            NSLog(@"%@",@"Lock");
             self.lockInSwitch.on = true;
         }
@@ -157,8 +157,11 @@
         [self.graphHelper setGraphData:zoomedArr
                         withDataLength:zoomedArrLen
                          forGraphIndex:2
-                     withNormalization:32.0
+                     withNormalization:16.0
                          withZeroValue:-60];
+        
+        int re = [self.myAnalyzerModel getMotionByZoomedArr:zoomedArr withArrLength:zoomedArrLen];
+        
         
         free(arrayData);
         free(fftMagnitude);
